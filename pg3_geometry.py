@@ -23,10 +23,10 @@ def readPositionsRight(filename):
     del positions['Position']
     del positions['DetectorNum']
 
-    x = np.array(map(float, positions['X']))
-    y = np.array(map(float, positions['Elevation']))
-    z = np.array(map(float, positions['Z'])) - 60.
-    positions['bank'] = np.array(map(int, positions['bank']))
+    x = np.array(list(map(float, positions['X'])))
+    y = np.array(list(map(float, positions['Elevation'])))
+    z = np.array(list(map(float, positions['Z']))) - 60.
+    positions['bank'] = np.array(list(map(int, positions['bank'])))
 
     positions['position'] = []
     for x_i,y_i,z_i in zip(x,y,z):
@@ -61,9 +61,9 @@ def readPositionsRight(filename):
 
 def readPositionsLeft(filename):
     positions = readFile(filename)
-    x = np.array(map(float, positions['X']))
-    y = np.array(map(float, positions['Elevation']))
-    z = np.array(map(float, positions['Z']))
+    x = np.array(list(map(float, positions['X'])))
+    y = np.array(list(map(float, positions['Elevation'])))
+    z = np.array(list(map(float, positions['Z'])))
     positions['position'] = []
     for x_i,y_i,z_i in zip(x,y,z):
         positions['position'].append(Vector(x_i, y_i, z_i))
