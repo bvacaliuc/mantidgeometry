@@ -1,0 +1,16 @@
+name: mantidgeometry
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - epics-base
+  - h5py
+  - lxml
+  - numpy<1.20
+  - python>=3
+  - pip
+  - ipython
+  - pyepics
+  - six
+  - pip:
+
