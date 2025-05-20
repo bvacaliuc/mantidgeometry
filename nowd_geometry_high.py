@@ -23,10 +23,10 @@ def readPositionsRight(filename):
     del positions['Position']
     del positions['DetectorNum']
 
-    x = np.array(map(float, positions['X']))
-    y = np.array(map(float, positions['Elevation']))
-    z = np.array(map(float, positions['Z'])) - 60.
-    positions['bank'] = np.array(map(int, positions['bank']))
+    x = np.array(list(map(float, positions['X'])))
+    y = np.array(list(map(float, positions['Elevation'])))
+    z = np.array(list(map(float, positions['Z']))) - 60.
+    positions['bank'] = np.array(list(map(int, positions['bank'])))
 
     positions['position'] = []
     for x_i,y_i,z_i in zip(x,y,z):
@@ -37,9 +37,7 @@ def readPositionsRight(filename):
     del positions['Z']
 
     columnnames = {'SA':1, 'SB':2, 'SC':3, 'SD':4, 'SE':5, 'SF':6,
-                   'SG':7, 'SH':8, 'SI':9, 'SJ':10, 'SK':11, 'SL':12,
-                   'NA':13, 'NB':14, 'NC':15, 'ND':16, 'NE':17, 'NF':18,
-                   'NG':19, 'NH':20, 'NI':21, 'NJ':22, 'NK':23, 'NL':24}
+                   'SG':7, 'SH':8, 'SI':9, 'SJ':10, 'SK':11, 'SL':12}
 
     banks = {}
     for i, (column, row, bank, position) in enumerate(zip(positions['column'], positions['row'], positions['bank'], positions['position'])):
@@ -57,15 +55,15 @@ def readPositionsRight(filename):
 
         if i == 3:
             column = 'Column%d' % columnnames[column]
-            banks[int(bank)] = (column, Rectangle(four, one, two, three, tolerance_len=0.006))
+            banks[int(bank)] = (column, Rectangle(four, one, two, three, tolerance_len=0.002))
 
     return banks
 
 def readPositionsLeft(filename):
     positions = readFile(filename)
-    x = np.array(map(float, positions['X']))
-    y = np.array(map(float, positions['Elevation']))
-    z = np.array(map(float, positions['Z']))
+    x = np.array(list(map(float, positions['X'])))
+    y = np.array(list(map(float, positions['Elevation'])))
+    z = np.array(list(map(float, positions['Z'])))
     positions['position'] = []
     for x_i,y_i,z_i in zip(x,y,z):
         positions['position'].append(Vector(x_i, y_i, z_i))
@@ -77,16 +75,19 @@ def readPositionsLeft(filename):
     names = {'D596':79,
              'D579':76,
              'D261':73,
+             'DNI3':71,
              'D585':70,
              'D586':67,
+             'DNG3':65,
              'D573':64,
              'D571':61,
              'D574':58,
              'D225':55,
              'D565':52,
              'D551':48,
+             'DNA3':44,
              'D594':43}
-    columnnames = {43:13, 48:14, 52:15, 55:16, 58:17, 61:18, 64:19, 67:20, 70:21, 73:22, 76:23, 79:24}
+    columnnames = {43:13, 44:13, 48:14, 52:15, 55:16, 58:17, 61:18, 64:19, 65:19, 67:20, 70:21, 71:21, 73:22, 76:23, 79:24}
     banks = {}
     for i, (det, position) in enumerate(zip(positions['Detector'], positions['position'])):
         bank = names[det[:4]]
@@ -104,12 +105,12 @@ def readPositionsLeft(filename):
 
         if i == 3:
             column = 'Column%d' % columnnames[bank]
-            banks[bank] = (column, Rectangle(four, one, two, three, tolerance_len=0.006))
+            banks[bank] = (column, Rectangle(four, one, two, three, tolerance_len=0.002))
 
     return banks
 
 if __name__ == "__main__":
-    inst_name = "PG3"
+    inst_name = "NOWD"
     xml_outfile = inst_name+"_Definition.xml"
     authors = ["Peter Peterson",
                "Stuart Campbell",
@@ -119,7 +120,7 @@ if __name__ == "__main__":
     # boiler plate stuff
     instr = MantidGeom(inst_name,
                        comment="Created by " + ", ".join(authors),
-                       valid_from="2025-05-16 00:00:01")
+                       valid_from="2025-05-20 00:00:01")
     instr.addComment("DEFAULTS")
     instr.addSnsDefaults()
     instr.addComment("SOURCE")
@@ -172,12 +173,21 @@ if __name__ == "__main__":
     # delete the banks that are no longer installed
     # South Banks
     for bank in [1,5,6,10,28,31,32,34,35,37,38,40]:
-        del banks[bank]
+        try:
+            del banks[bank]
+        except KeyError:
+            pass
     # North Banks (Gen2 are 44,65,71)
     for bank in [41,42,45,46,47,49,50,51,53,54,56,57,59]:
-        del banks[bank]
+        try:
+            del banks[bank]
+        except KeyError:
+            pass
     for bank in [60,62,63,66,68,69,72,74,75,77,78,80]:
-        del banks[bank]
+        try:
+            del banks[bank]
+        except KeyError:
+            pass
 
     # create north and south sides
     sides = {'North':['Column%d' % i for i in range(13,25)],
@@ -214,17 +224,17 @@ if __name__ == "__main__":
             createdcolumns[column] = col
 
         extra_attrs={"idstart":offset, 'idfillbyfirst':'y', 'idstepbyrow':y_num2}
-        det = instr.makeDetectorElement('panel_v2', root=col, extra_attrs=extra_attrs)
+        det = instr.makeDetectorElement('panel_g2', root=col, extra_attrs=extra_attrs)
         rect.makeLocation(instr, det, name)
 
     # add the panel shape
-    instr.addComment(" Version 2 Detector Panel (7x154)")
+    instr.addComment(f" Gen2 Detector Panel ({y_num2}x{x_num2})")
     x_delta2 = x_extent/float(x_num2)
     x_offset2 = x_delta2*(1.-float(x_num2))/2.
     y_delta2 = y_extent/float(y_num2)
     y_offset2 = y_delta2*(1.-float(y_num2))/2.
-    det = instr.makeTypeElement("panel_v2",
-                                extra_attrs={"is":"rectangular_detector", "type":"pixel_v2",
+    det = instr.makeTypeElement("panel_g2",
+                                extra_attrs={"is":"rectangular_detector", "type":"pixel_g2",
                                              "xpixels":x_num2, "xstart":x_offset2, "xstep":x_delta2,
                                              "ypixels":y_num2, "ystart":y_offset2, "ystep":y_delta2
                                              })
@@ -236,8 +246,8 @@ if __name__ == "__main__":
     instr.addDummyMonitor(0.01, .03)
 
     # shape for detector pixels
-    instr.addComment(" Pixel for Version 2 Detectors (7x154)")
-    instr.addCuboidPixel("pixel_v2",
+    instr.addComment(f" Pixel for Gen2 Detectors ({y_num2}x{x_num2})")
+    instr.addCuboidPixel("pixel_g2",
                          [-.5*x_delta2, -.5*y_delta2,  0.0],
                          [-.5*x_delta2,  .5*y_delta2,  0.0],
                          [-.5*x_delta2, -.5*y_delta2, -0.0001],
