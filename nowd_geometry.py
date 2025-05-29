@@ -164,11 +164,11 @@ if __name__ == "__main__":
     # guides - not even copying the text
 
     # read in detectors
-    banks = readPositionsRight("SNS/POWGEN/NOWD_geom_2025A.csv")
-    banksL = readPositionsLeft("SNS/POWGEN/NOWD_geom_left_2025A.csv")
-    for bank in banksL.keys():
-        banks[bank] = banksL[bank]
-    del banksL
+    #banks = readPositionsRight("SNS/POWGEN/NOWD_geom_2025A.csv")
+    banks = readPositionsLeft("SNS/POWGEN/NOWD_geom_left_2025A.csv")
+    #for bank in banksL.keys():
+    #    banks[bank] = banksL[bank]
+    #del banksL
 
     # delete the banks that are no longer installed
     # South Banks
@@ -190,8 +190,10 @@ if __name__ == "__main__":
             pass
 
     # create north and south sides
-    sides = {'North':['Column%d' % i for i in range(13,25)],
-             'South':['Column%d' % i for i in range(1,13)]}
+    #sides = {'North':['Column%d' % i for i in range(13,25)],
+    #         'South':['Column%d' % i for i in range(1,13)]}
+    sides = {'North':['Column%d' % i for i in [13,19,21]]}
+
     # add the empty components
     for name in sides.keys():
         group = instr.addComponent(name)
