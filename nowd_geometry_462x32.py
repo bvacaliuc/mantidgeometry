@@ -111,7 +111,7 @@ def readPositionsLeft(filename):
 
 if __name__ == "__main__":
     inst_name = "NOWD"
-    xml_outfile = inst_name+"_Definition_high.xml"
+    xml_outfile = f"{inst_name}_Definition_{x_num2}x{y_num2}.xml"
     authors = ["Peter Peterson",
                "Stuart Campbell",
                "Vickie Lynch",

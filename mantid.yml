@@ -1,0 +1,29 @@
+name: mantid
+channels:
+  - oncat
+  - mantid
+  - mantid-ornl
+  - neutrons
+  - conda-forge
+dependencies:
+  - gtk3
+  - h5py
+  - hdf4
+  - hdf5
+  - ipython
+  - mantid>=6.12
+  - mantidqt>=6.12
+  - mantidworkbench>=6.12
+  - matplotlib
+  - numpy
+  - pandas
+  - pip
+  - pyoncat
+  - pyqt>=5,<6
+  - python
+  - scipy
+  - tbb
+  - tk
+  - virtualenv
+  - pip:
+      - mantidqtinterfaces>=6.12

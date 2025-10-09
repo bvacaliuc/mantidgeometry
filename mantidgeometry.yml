@@ -1,7 +1,6 @@
 name: mantidgeometry
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - epics-base
   - h5py
