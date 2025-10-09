@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 file1 = "NOWD_Definition_154x7.xml"
-file2 = "NOWD_Definition_462x32.xml"
+file2 = "NOWD_Definition_525x28.xml"
 
 ws1 = CreateSampleWorkspace();
 #inst1 = ws1.getInstrument();
