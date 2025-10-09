@@ -93,7 +93,7 @@ writing NOWD_Definition_154x7.xml
 >     <component type="Column21"/>
 ```
 
-You will need the edits in the '<' section.  Example edited files are provided in `NOWD_Definition_154x7.chk` and `NOWD_Definition_462x32.chk`.
+You will need the edits in the '<' section.  Example edited files are provided in `NOWD_Definition_154x7.chk`, `NOWD_Definition_525x28.chk` and `NOWD_Definition_462x32.chk`.
 
 4. After you edit the definition file to remove the errors, you can test loading it in mantid.  **NOTE: you need to use a different environment to do that!**
 **NOTE: I had problems on my MacOS using a simple `mamba env create -f mantid.yml`, but I was able to use the hint posted in this [issue](https://github.com/mamba-org/mamba/issues/3951) to workaround an issue with not being able to create the environment.
